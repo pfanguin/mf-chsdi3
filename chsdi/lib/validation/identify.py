@@ -29,7 +29,11 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
             u'esriGeometryPoint',
             u'esriGeometryPolyline',
             u'esriGeometryPolygon',
-            u'esriGeometryEnvelope'
+            u'esriGeometryEnvelope',
+            u'esriGeometryPointJSON',
+            u'esriGeometryPolylineJSON',
+            u'esriGeometryPolygonJSON',
+            u'esriGeometryEnvelopeJSON'
         )
         self.where = request.params.get('where')
         self.geometryType = request.params.get('geometryType')
@@ -124,8 +128,18 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                 elif self._geometryType == 'esriGeometryPoint':
                     value = [float_raise_nan(c) for c in value.split(',')]
                     self._geometry = esrijson.to_shape({'x': value[0], 'y': value[1]})
-                else:
+                elif self._geometryType == 'esriGeometryPolyline' or self._geometryType == 'esriGeometryPolygon':
                     self._geometry = esrijson.to_shape(esrijson.loads(value))
+                elif self._geometryType == 'esriGeometryEnvelopeJSON':
+                    print("TODO : esri geometry as JSON input treatment. as srid is mentionned, we have to verify that the specified srid is the same as the given srid")
+                    print("ENVELOPE JSON")
+                    print esrijson.loads(value)
+                    print(esrijson.loads(value)['wkid'])
+
+                elif self._geometryType == 'esriGeometryPointJSON':
+                    print("TODO : esri geometry as JSON input treatment")
+                elif self._geometryType == 'esriGeometryPolylineJSON' or self._geometryType == 'esriGeometryPolygonJSON':
+                    print("TODO : esri geometry as JSON input treatment")
             except:
                 raise HTTPBadRequest('Please provide a valid geometry')
 
