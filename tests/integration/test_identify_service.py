@@ -799,3 +799,30 @@ class TestIdentifyService(TestsBase):
                       tolerance='10',
                       lang='fr')
         self.testapp.get('/rest/services/all/MapServer/identify', params=params, headers=accept_headers, status=400)
+
+    def test_identify_valid_esriJSON_point(self):
+        params = dict(geometry='{\'x\':555000,\'y\':171125,\'spatialReference\': {\'wkid\':21781}}',
+                  geometryFormat='geojson',
+                  geometryType='esriGeometryPointJSON',
+                  imageDisplay='1920,793,96',
+                  layers='all:ch.bfe.windenergie-geschwindigkeit_h50',
+                  mapExtent='346831.18,86207.571,826831.18,284457.57',
+                  returnGeometry='true',
+                  tolerance='10')
+        resp = self.testapp.get('/rest/services/all/MapServer/identify', params=params, headers=accept_headers,
+                                status=200)
+        self.assertEqual(resp.content_type, 'application/json')
+        self.assertIn('results', resp.json)
+        self.assertEqual(len(resp.json['results']), 1)
+        self.testapp.get('/rest/services/all/MapServer/identify', params=params, headers=accept_headers, status=200)
+
+    def test_identify_valid_esriJSON_envelope(self):
+        params = dict(geometry='{\'xmin\':548945.5,\'ymin\':147956,\'xmax\':549402,\'ymax\':148103.5,\'spatialReference\':{\'wkid\':21781}}',
+                  geometryType='esriGeometryEnvelopeJSON',
+                  imageDisplay='500,600,96',
+                  mapExtent='548945.5,147956,549402,148103.5',
+                  tolerance='1',
+                  layers='all:ch.swisstopo.fixpunkte-agnes')
+        resp = self.testapp.get('/rest/services/ech/MapServer/identify', params=params, headers=accept_headers,
+                                status=200)
+        self.assertEqual(resp.content_type, 'application/json')
