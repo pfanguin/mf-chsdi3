@@ -144,6 +144,10 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                     self._geometry = value
                 elif self._geometryType == 'esriGeometryPolylineJSON' or self._geometryType == 'esriGeometryPolygonJSON':
                     print("TODO : esri geometry as JSON input treatment")
+            except ValueError as exception:
+                print("VALUE ERROR")
+                print(exception)
+                raise HTTPBadRequest('Value error')
             except:
                 raise HTTPBadRequest('Please provide a valid geometry')
 
