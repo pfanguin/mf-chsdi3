@@ -128,6 +128,10 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                 elif self._geometryType == 'esriGeometryPoint':
                     value = [float_raise_nan(c) for c in value.split(',')]
                     self._geometry = esrijson.to_shape({'x': value[0], 'y': value[1]})
+                    print("HELLO")
+                    print(self._geometry)
+                    print(type(self._geometry))
+                    print(self.srid)
                 elif self._geometryType == 'esriGeometryPolyline' or self._geometryType == 'esriGeometryPolygon':
                     self._geometry = esrijson.to_shape(esrijson.loads(value))
                 elif self._geometryType == 'esriGeometryEnvelopeJSON':
@@ -141,16 +145,15 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                     print(esrijson.loads(value.replace("'","\"")))
                     print(esrijson.loads(value.replace("'","\""))['spatialReference']['wkid'])
                     self._geometry = value
+                    print(self.geometry)
+                    print(type(self._geometry))
+                    print(self.srid)
 
                 elif self._geometryType == 'esriGeometryPointJSON':
                     print("TODO : esri geometry as JSON input treatment")
                     self._geometry = value
                 elif self._geometryType == 'esriGeometryPolylineJSON' or self._geometryType == 'esriGeometryPolygonJSON':
                     print("TODO : esri geometry as JSON input treatment")
-            except ValueError as exception:
-                print("VALUE ERROR")
-                print(exception)
-                raise HTTPBadRequest('Value error')
             except:
                 raise HTTPBadRequest('Please provide a valid geometry')
 
