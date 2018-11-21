@@ -134,6 +134,7 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                     print("TODO : esri geometry as JSON input treatment. as srid is mentionned, we have to verify that the specified srid is the same as the given srid")
                     print("ENVELOPE JSON")
                     print(value)
+                    print(value.replace('\'','"'))
                     print(str(esrijson.loads(value)))
                     print(esrijson.loads(value))
                     print(esrijson.loads(value)['wkid'])
