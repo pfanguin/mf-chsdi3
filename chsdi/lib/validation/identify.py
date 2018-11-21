@@ -125,6 +125,10 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
             try:
                 if self._geometryType == 'esriGeometryEnvelope':
                     self._geometry = esrijson.to_shape([float_raise_nan(c) for c in value.split(',')])
+                    print("HI")
+                    print(self._geometry)
+                    print(type(self._geometry))
+                    print(self.srid)
                 elif self._geometryType == 'esriGeometryPoint':
                     value = [float_raise_nan(c) for c in value.split(',')]
                     self._geometry = esrijson.to_shape({'x': value[0], 'y': value[1]})
