@@ -139,7 +139,7 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                     print(str(esrijson.loads(value.replace("'","\""))))
                     print("hey")
                     print(esrijson.loads(value.replace("'","\"")))
-                    print(esrijson.loads(value.replace("'","\""))['wkid'])
+                    print(esrijson.loads(value.replace("'","\""))['spatialReference']['wkid'])
                     self._geometry = value
 
                 elif self._geometryType == 'esriGeometryPointJSON':
