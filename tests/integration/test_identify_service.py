@@ -801,6 +801,8 @@ class TestIdentifyService(TestsBase):
         self.testapp.get('/rest/services/all/MapServer/identify', params=params, headers=accept_headers, status=400)
 
     def test_identify_valid_esriJSON_point(self):
+        print("begin test valid esri JSON point")
+        print("")
         params = dict(geometry='{\'x\':555000,\'y\':171125,\'spatialReference\': {\'wkid\':21781}}',
                   geometryFormat='geojson',
                   geometryType='esriGeometryPointJSON',
@@ -811,12 +813,16 @@ class TestIdentifyService(TestsBase):
                   tolerance='10')
         resp = self.testapp.get('/rest/services/all/MapServer/identify', params=params, headers=accept_headers,
                                 status=200)
+        print("test resullts incoming")
+        print("")
         self.assertEqual(resp.content_type, 'application/json')
         self.assertIn('results', resp.json)
         self.assertEqual(len(resp.json['results']), 1)
         self.testapp.get('/rest/services/all/MapServer/identify', params=params, headers=accept_headers, status=200)
 
     def test_identify_valid_esriJSON_envelope(self):
+        print("begin test valid esri JSON envelope")
+        print("")
         params = dict(geometry='{\'xmin\':548945.5,\'ymin\':147956,\'xmax\':549402,\'ymax\':148103.5,\'spatialReference\':{\'wkid\':21781}}',
                   geometryType='esriGeometryEnvelopeJSON',
                   imageDisplay='500,600,96',
@@ -825,4 +831,6 @@ class TestIdentifyService(TestsBase):
                   layers='all:ch.swisstopo.fixpunkte-agnes')
         resp = self.testapp.get('/rest/services/ech/MapServer/identify', params=params, headers=accept_headers,
                                 status=200)
+        print("test resullts incoming")
+        print("")
         self.assertEqual(resp.content_type, 'application/json')
