@@ -125,17 +125,9 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
             try:
                 if self._geometryType == 'esriGeometryEnvelope':
                     self._geometry = esrijson.to_shape([float_raise_nan(c) for c in value.split(',')])
-                    print("HI")
-                    print(self._geometry)
-                    print(type(self._geometry))
-                    print(self.srid)
                 elif self._geometryType == 'esriGeometryPoint':
                     value = [float_raise_nan(c) for c in value.split(',')]
                     self._geometry = esrijson.to_shape({'x': value[0], 'y': value[1]})
-                    print("HELLO")
-                    print(self._geometry)
-                    print(type(self._geometry))
-                    print(self.srid)
                 elif self._geometryType == 'esriGeometryPolyline' or self._geometryType == 'esriGeometryPolygon':
                     self._geometry = esrijson.to_shape(esrijson.loads(value))
                 elif self._geometryType == 'esriGeometryEnvelopeJSON':
@@ -155,7 +147,10 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
 
                 elif self._geometryType == 'esriGeometryPointJSON':
                     print("TODO : esri geometry as JSON input treatment")
-                    self._geometry = value
+                    esrijsonvalue=esrijson.loads(value.replace("'","\""))
+                    self.srid= esrijsonvalue['spatialReference']['wkid']
+                    self._geometry = esrijson.to_shape({"x": esrijsonvalue['geometry']['x'],
+                                                        "y":esrijsonvalue['geometry']['y]']})
                 elif self._geometryType == 'esriGeometryPolylineJSON' or self._geometryType == 'esriGeometryPolygonJSON':
                     print("TODO : esri geometry as JSON input treatment")
             except:
