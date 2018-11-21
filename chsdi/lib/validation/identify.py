@@ -146,7 +146,8 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                     print(self.srid)
 
                 elif self._geometryType == 'esriGeometryPointJSON':
-                    print("TODO : esri geometry as JSON input treatment")
+                    print("TODO : esri geometry as JSON input treatment for point")
+                    print(value)
                     esrijsonvalue=esrijson.loads(value.replace("'","\""))
                     print("hello")
                     print(self.srid)
