@@ -834,4 +834,3 @@ class TestIdentifyService(TestsBase):
         print("test resullts incoming")
         print("")
         self.assertEqual(resp.content_type, 'application/json')
-        
