@@ -134,12 +134,12 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                     print("TODO : esri geometry as JSON input treatment. as srid is mentionned, we have to verify that the specified srid is the same as the given srid")
                     print("ENVELOPE JSON")
                     print(value)
-                    print(value.replace("'","\""))
+                    print(value.replace("'", "\""))
                     print("hello")
-                    print(str(esrijson.loads(value.replace("'","\""))))
+                    print(str(esrijson.loads(value.replace("'", "\""))))
                     print("hey")
-                    print(esrijson.loads(value.replace("'","\"")))
-                    print(esrijson.loads(value.replace("'","\""))['spatialReference']['wkid'])
+                    print(esrijson.loads(value.replace("'", "\"")))
+                    print(esrijson.loads(value.replace("'", "\""))['spatialReference']['wkid'])
                     self._geometry = value
                     print(self.geometry)
                     print(type(self._geometry))
@@ -148,7 +148,8 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                 elif self._geometryType == 'esriGeometryPointJSON':
                     print("TODO : esri geometry as JSON input treatment for point")
                     print(value)
-                    esrijsonvalue=esrijson.loads(value.replace("'","\""))
+                    esrijsonvalue=esrijson.loads(value.replace("'", "\""))
+                    print(esrijsonvalue)
                     print("hello")
                     print(self.srid)
                     self.srid= esrijsonvalue['spatialReference']['wkid']
@@ -165,7 +166,6 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
 
             except:
                 raise HTTPBadRequest('Please provide a valid geometry')
-
 
     @imageDisplay.setter
     def imageDisplay(self, value):
@@ -288,3 +288,4 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
             if self.geometry is None:
                 raise HTTPBadRequest('The order value can only be used together with a geometry.')
             self._order = value
+
