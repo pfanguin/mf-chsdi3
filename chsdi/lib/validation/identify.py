@@ -126,6 +126,7 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                 if self._geometryType == 'esriGeometryEnvelope':
                     self._geometry = esrijson.to_shape([float_raise_nan(c) for c in value.split(',')])
                     print("comparison purpose")
+                    print(value)
                     print(self._geometry)
                     print("")
                 elif self._geometryType == 'esriGeometryPoint':
@@ -144,7 +145,7 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                     print(esrijson.loads(value.replace("'", "\"")))
                     print(esrijson.loads(value.replace("'", "\""))['spatialReference']['wkid'])
                     print("lock here")
-                    self._geometry = esrijson.to_shape(esrijson.loads(value))
+                    self._geometry = esrijson.to_shape([float_raise_nan(c) for c in value.split(',')])
                     print(self.geometry)
                     print(type(self._geometry))
                     print(self.srid)
