@@ -143,6 +143,7 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                     print("hey")
                     print(esrijson.loads(value.replace("'", "\"")))
                     print(esrijson.loads(value.replace("'", "\""))['spatialReference']['wkid'])
+                    print("lock here")
                     self._geometry = esrijson.to_shape(esrijson.loads(value))
                     print(self.geometry)
                     print(type(self._geometry))
