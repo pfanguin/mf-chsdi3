@@ -141,10 +141,10 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                     conform_json = esrijson.loads(value.replace("'", "\""))
                     print(conform_json)
                     print(conform_json['xmin'])
-                    minmaxvalues = str(conform_json['xmin']) + "," \
-                                   + str(conform_json['ymin']) + "," \
-                                   + str(conform_json['xmax']) + "," \
-                                   + str(conform_json['ymax'])
+                    minmaxvalues = str(conform_json['xmin']) + "," + \
+                                   str(conform_json['ymin']) + "," + \
+                                   str(conform_json['xmax']) + "," + \
+                                   str(conform_json['ymax'])
                     print(minmaxvalues)
                     self._geometry = esrijson.to_shape([float_raise_nan(c) for c in minmaxvalues.split(',')])
                     print(self.geometry)
