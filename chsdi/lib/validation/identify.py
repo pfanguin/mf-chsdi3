@@ -138,14 +138,15 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
                     print("TODO : esri geometry as JSON input treatment. as srid is mentionned, we have to verify that the specified srid is the same as the given srid")
                     print("ENVELOPE JSON")
                     print(value)
-                    print(value.replace("'", "\""))
-                    print("hello")
-                    print(str(esrijson.loads(value.replace("'", "\""))))
-                    print("hey")
-                    print(esrijson.loads(value.replace("'", "\"")))
-                    print(esrijson.loads(value.replace("'", "\""))['spatialReference']['wkid'])
-                    print("lock here")
-                    self._geometry = esrijson.to_shape([float_raise_nan(c) for c in value.split(',')])
+                    conform_json = esrijson.loads(value.replace("'", "\""))
+                    print(conform_json)
+                    print(conform_json['xmin'])
+                    minmaxvalues = str(conform_json['xmin']) + "," \
+                                   + str(conform_json['ymin']) + "," \
+                                   + str(conform_json['xmax']) + "," \
+                                   + str(conform_json['ymax'])
+                    print(minmaxvalues)
+                    self._geometry = esrijson.to_shape([float_raise_nan(c) for c in minmaxvalues.split(',')])
                     print(self.geometry)
                     print(type(self._geometry))
                     print(self.srid)
