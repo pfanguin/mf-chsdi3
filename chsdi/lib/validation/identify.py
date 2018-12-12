@@ -288,4 +288,3 @@ class IdentifyServiceValidation(BaseFeaturesValidation):
             if self.geometry is None:
                 raise HTTPBadRequest('The order value can only be used together with a geometry.')
             self._order = value
-
