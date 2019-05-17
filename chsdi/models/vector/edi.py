@@ -244,6 +244,7 @@ class VolkBetriebZaehlung:
     __template__ = 'templates/htmlpopup/volk_betrieb_zaehlung.mako'
     __label__ = 'reli'
     __timeInstant__ = 'i_year'
+    __queryable_attributes__ = ['i_year', 'reli', 'number']
     id = Column('bgdi_id', Integer, primary_key=True)
     i_year = Column('i_year', Unicode)
     reli = Column('reli', Integer)
