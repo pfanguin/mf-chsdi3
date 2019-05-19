@@ -151,11 +151,11 @@ Here is a description of the data one can find in the above response.
   - **wmsResource**: the WMS resource of the layer
   - **scaleLimit**: the scale at which the layer is valid
   - **inspireUpperAbstract**: the abstract of the `INSPIRE <https://www.geo.admin.ch/en/geo-information-switzerland/geodata-index-inspire.html>`_ category (first level)
-  - **inprireName**: the name of the `INSPIRE <https://www.geo.admin.ch/en/geo-information-switzerland/geodata-index-inspire.html>`_ category
+  - **inspireName**: the name of the `INSPIRE <https://www.geo.admin.ch/en/geo-information-switzerland/geodata-index-inspire.html>`_ category
   - **urlDetails**: link to the official details page
   - **bundCollectionNumber**: the collection number
   - **dataOwner**: the data owner
-  - **inprieAbstract**: the abstract of the `INSPIRE <https://www.geo.admin.ch/en/geo-information-switzerland/geodata-index-inspire.html>`_ category the layer belongs to
+  - **inspireAbstract**: the abstract of the `INSPIRE <https://www.geo.admin.ch/en/geo-information-switzerland/geodata-index-inspire.html>`_ category the layer belongs to
   - **absctract**: the layer absctract
   - **wmsContactAbbreviation**: the abbreviation contact for the WMS resource
   - **downloadUrl**: the link where the data can be downloaded
