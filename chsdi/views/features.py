@@ -535,7 +535,9 @@ def _get_features_for_filters(params, layerBodIds, maxFeatures=None, where=None)
 
         if where is not None:
             vectorLayer = []
+            filter_attributes = []
             for model in models:
+                filter_attributes += list(model().get_orm_columns_names())
                 txt = format_query(model, where)
                 if txt is not None:
                     vectorLayer.append((model, txt))
@@ -650,7 +652,7 @@ def _attributes(request):
 
 
 def _find(request):
-    MaxFeatures = 50
+    MaxFeatures = MAX_FEATURES
     params = FindServiceValidation(request)
     if params.searchText is None:
         raise exc.HTTPBadRequest('Please provide a searchText')
@@ -660,8 +662,21 @@ def _find(request):
     if models is None:
         raise exc.HTTPBadRequest(
             'No Vector Table was found for %s for searchField %s' % (params.layer, params.searchField))
-
+    vectorLayers = []
     for model in models:
+        where_txt = None
+        if params.where is not None:
+            where_txt = format_query(model, params.where)
+        vectorLayers.append((model, where_txt))
+
+    # Attributes in the 'where' or 'layerDefs' should match attributes in
+    # at least one model related to a layer bodId
+    if params.where is not None and not any(list(zip(*vectorLayers)[1])):
+        raise exc.HTTPBadRequest(
+            'Filtering on a not existing field on layer {}'.format(params.layer)
+        )
+
+    for model, where_text in vectorLayers:
         searchColumn = model.get_column_by_property_name(params.searchField)
         query = request.db.query(model)
         if params.contains:
@@ -680,6 +695,10 @@ def _find(request):
                 query = query.filter(
                     searchColumn == searchText
                 )
+        if where_txt is not None:
+            query = query.filter(text(
+                where_txt
+            ))
         query = query.limit(MaxFeatures)
         for feature in query:
             f = _process_feature(feature, params)
