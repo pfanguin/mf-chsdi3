@@ -2,6 +2,38 @@
 	"type": "unique",
 	"property": "Availability",
 	"values": [{
+                "geomType": "point",
+                "value": "Unknown",
+                "minResolution":0,
+                "maxResolution":20,
+                "vectorOptions": {
+                        "type": "icon",
+                "src": "https://data.int.bgdi.ch/ch.bfe.ladestellen-elektromobilitaet/symbols/icon-pin-shadow-no-status-information-50px.png",
+                "scale": 1,
+                "anchor": [0.5, 1]
+                }
+        }, {
+                "geomType": "point",
+                "value": "Unknown",
+                "minResolution":20,
+                "maxResolution":250,
+                "vectorOptions": {
+                        "type": "icon",
+                "src": "https://data.int.bgdi.ch/ch.bfe.ladestellen-elektromobilitaet/symbols/icon-pin-shadow-no-status-information-40px.png",
+                "scale": 1,
+                "anchor": [0.5, 1]
+                }
+        }, {
+                "geomType": "point",
+                "value": "Unknown",
+                "minResolution":250,
+                "vectorOptions": {
+                        "type": "icon",
+                "src": "https://data.int.bgdi.ch/ch.bfe.ladestellen-elektromobilitaet/symbols/icon-pin-shadow-no-status-information-30px.png",
+                "scale": 1,
+                "anchor": [0.5, 1]
+                }
+        }, {
 		"geomType": "point",
 		"value": "Available",
                 "minResolution":0,
