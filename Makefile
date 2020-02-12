@@ -346,7 +346,7 @@ deployprod: guard-SNAPSHOT
 legends: guard-BODID guard-WMSHOST
 	source rc_user && scripts/downloadlegends.sh $(WMSHOST) $(BODID) $(WMSSCALELEGEND)
 
-chsdi/templates/info.json.mako:
+chsdi/templates/info.json.mako: guard-GIT_COMMIT_SHORT guard-GIT_COMMIT_HASH guard-GIT_BRANCH
 	@echo "${GREEN}info.json has changed${RESET}";
 chsdi/static/info.json:  chsdi/templates/info.json.mako
 		${PYTHON_CMD} ${MAKO_CMD} \
@@ -704,7 +704,7 @@ clean:
 	rm -rf apache/application.wsgi
 	rm -rf deploy/deploy-branch.cfg
 	rm -rf deploy/conf/00-branch.conf
-	rm -f  chsdi/static/info.json
+	[ -d ".git"  ] && rm -f  chsdi/static/info.json
 
 .PHONY: cleanall
 cleanall: clean
