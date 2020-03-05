@@ -72,12 +72,14 @@ RewriteRule ^${apache_entry_path}/robots.txt ${apache_entry_path}/static/${robot
 </LocationMatch>
 
 # WMTS Capabilities
-RewriteRule ^${apache_entry_path}/1.0.0/WMTSCapabilities\.xml$ ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml [PT,NC,QSA,L]
-RewriteRule ^${apache_entry_path}/1.0.0/WMTSCapabilities.EPSG.(\d+).xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml?epsg=$1 [L,QSA,PT]
-RewriteRule ^${apache_entry_path}/1.0.0/WMTSCapabilities.xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml [L,QSA,PT]
+RewriteRule ^${apache_entry_path}/1.0.0/WMTSCapabilities\.xml$ ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml [PT,NC,QSA,L,E=${apache_base_path}setfiveminutescache:true]
+RewriteRule ^${apache_entry_path}/1.0.0/WMTSCapabilities.EPSG.(\d+).xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml?epsg=$1 [L,QSA,PT,E=${apache_base_path}setfiveminutescache:true]
+RewriteRule ^${apache_entry_path}/1.0.0/WMTSCapabilities.xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml [L,QSA,PT,E=${apache_base_path}setfiveminutescache:true]
 # # Better ArcGis support
-RewriteRule ^${apache_entry_path}/EPSG/(\d+)/1.0.0/WMTSCapabilities.xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml?epsg=$1 [L,QSA,PT]
-RewriteRule ^${apache_entry_path}/EPSG/(\d+)/(de|fr|it|rm|en)/1.0.0/WMTSCapabilities.xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml?epsg=$1&lang=$2 [L,PT]
+RewriteRule ^${apache_entry_path}/EPSG/(\d+)/1.0.0/WMTSCapabilities.xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml?epsg=$1 [L,QSA,PT,E=${apache_base_path}setfiveminutescache:true]
+RewriteRule ^${apache_entry_path}/EPSG/(\d+)/(de|fr|it|rm|en)/1.0.0/WMTSCapabilities.xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml?epsg=$1&lang=$2 [L,PT,E=${apache_base_path}setfiveminutescache:true]
+
+Header set Cache-Control "max-age=300, public" env=${apache_base_path}setfiveminutescache
 
 # Shorten service
 RewriteCond %{HTTP_HOST} ^s.geo.admin.ch$
@@ -137,9 +139,3 @@ AliasMatch ^${apache_entry_path}/kml/(map\.geo\.admin\.ch_KML_\d+\.kml)$ ${kml_t
     Require group iwi-team bgdi-team
 </LocationMatch>
 
-# WMTS GetCapabilities access control
-RewriteRule ^${apache_entry_path}/1.0.0/WMTSCapabilities.EPSG.(\d+).xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml?epsg=$1 [L,QSA,PT]
-RewriteRule ^${apache_entry_path}/1.0.0/WMTSCapabilities.xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml [L,QSA,PT]
-# Better ArcGis support
-RewriteRule ^${apache_entry_path}/EPSG/(\d+)/1.0.0/WMTSCapabilities.xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml?epsg=$1 [L,QSA,PT]
-RewriteRule ^${apache_entry_path}/EPSG/(\d+)/(de|fr|it|rm|en)/1.0.0/WMTSCapabilities.xml ${apache_entry_path}/rest/services/api/1.0.0/WMTSCapabilities.xml?epsg=$1&lang=$2 [L,PT]
