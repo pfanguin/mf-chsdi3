@@ -50,6 +50,9 @@ SHORTENER_TABLE_REGION ?= $(AWS_DEFAULT_REGION)
 PYPI_URL ?= https://pypi.org/simple/
 GITHUB_LAST_COMMIT=$(shell curl -s  https://api.github.com/repos/geoadmin/mf-chsdi3/commits | jq -r '.[0].sha')
 DYNAMIC_TRANSLATION ?= 1
+APACHE_LOG_LEVEL ?= warn
+APACHE_PORT = 80
+WSGI_PORT = 9001
 
 # Last values
 KEEP_VERSION ?= 'false'
@@ -103,6 +106,8 @@ LAST_GIT_COMMIT_HASH ?= $(call lastvalue,git-commit-hash)
 LAST_GIT_COMMIT_SHORT ?= $(call lastvalue,git-commit-short)
 LAST_GITHUB_LAST_COMMIT := $(call lastvalue,github-last-commit)
 LAST_DYNAMIC_TRANSLATION := $(call lastvalue,dynamic-translation)
+LAST_APACHE_PORT := $(call lastvalue,apache-port)
+LAST_WSGI_PORT := $(call lastvalue,wsgi-port)
 
 PYTHON_FILES := $(shell find chsdi/* tests/* -path chsdi/static -prune -o -path chsdi/lib/sphinxapi -prune -o -path tests/e2e -prune -o -type f -name "*.py" -print)
 TEMPLATE_FILES := $(shell find -type f -name "*.in" -print)
@@ -149,8 +154,11 @@ ifndef USE_PYTHON3
 endif
 
 ifeq ($(USE_PYTHON3), 1)
-		PYTHON_VERSION := 3.6.8
-build/python: local/bin/python3.6
+		PYTHON_VERSION := 3.7.3
+		PYTHON_CMD := /usr/bin/python3
+    PIP_CMD := /usr/bin/pip3
+		MAKO_CM := /usr/bin/mako-render 
+build/python: local/bin/python3
 		mkdir -p build && touch build/python;
 else
 		PYTHON_VERSION := $(shell python2 --version 2>&1 | cut -d ' ' -f 2 | cut -d '.' -f 1,2)
@@ -167,7 +175,7 @@ SYSTEM_PYTHON_CMD := $(CURRENT_DIR)/local/bin/python3
 python: build/python
 		@echo "Python installed"
 
-local/bin/python3.6:
+local/bin/python3:
 		mkdir -p $(CURRENT_DIRECTORY)/local;
 		curl -z $(CURRENT_DIRECTORY)/local/Python-$(PYTHON_VERSION).tar.xz \
 				https://www.python.org/ftp/python/$(PYTHON_VERSION)/Python-$(PYTHON_VERSION).tar.xz \
@@ -228,15 +236,20 @@ user:
 	source $(USER_SOURCE) && make all
 
 .PHONY: all
-all: setup chsdi/static/css/extended.min.css templates translate lint fixrights doc rss
+all: setup code chsdi/static/css/extended.min.css templates translate lint fixrights doc rss
 
-setup: .venv node_modules .venv/hooks
+# remove .venv/hooks
+setup: .venv .venv/hooks
 
 templates: apache/wsgi.conf development.ini production.ini chsdi/static/info.json
 
 
+.PHONY: base
+base: 25-mf-chsdi3.conf
+	docker build -t swisstopo/mf-chsdi3:base  -f Dockerfile.base  .
+
 PHONY: image
-image:
+image: 
 	docker build -t swisstopo/mf-chsdi3:python3.7  -f Dockerfile  .
 
 
@@ -427,6 +440,48 @@ apache/application.wsgi: apache/application.wsgi.mako \
 		--var "current_directory=$(CURRENT_DIRECTORY)" \
 		--var "modwsgi_config=$(MODWSGI_CONFIG)" $< > $@
 
+25-mf-chsdi3.conf.in:
+	@echo "${GREEN}Template file 25-mf-chsdi3.conf.in has changed${RESET}";
+25-mf-chsdi3.conf: 25-mf-chsdi3.conf.in \
+                  .venv/last-apache-port \
+                  .venv/last-wsgi-port
+	@echo "${GREEN}Creating 25-mf-chsdi3.conf...${RESET}";
+	${MAKO_CMD} \
+		--var "apache_log_level=$(APACHE_LOG_LEVEL)" \
+		--var "wsgi_port=$(WSGI_PORT)" \
+		--var "apache_port=$(APACHE_PORT)"  $< > $@
+
+apache/wsgi.conf.in:
+	@echo "${GREEN}Template file apache/wsgi.conf.in has changed${RESET}";
+apache/wsgi.conf: apache/wsgi.conf.in \
+                  apache/application.wsgi \
+                  .venv/last-apache-base-path \
+                  .venv/last-apache-entry-path \
+                  .venv/last-robots-file \
+                  .venv/last-branch-staging \
+                  .venv/last-git-branch \
+                  .venv/last-current-directory \
+                  .venv/last-deploy-target \
+                  .venv/last-modwsgi-user \
+                  .venv/last-wsgi-processes \
+                  .venv/last-wsgi-threads \
+                  .venv/last-wsgi-app \
+                  .venv/last-kml-temp-dir
+	@echo "${GREEN}Creating apache/wsgi.conf...${RESET}";
+	${MAKO_CMD} \
+		--var "apache_base_path=$(APACHE_BASE_PATH)" \
+		--var "apache_entry_path=$(APACHE_ENTRY_PATH)" \
+		--var "robots_file=$(ROBOTS_FILE)" \
+		--var "branch_staging=$(BRANCH_STAGING)" \
+		--var "git_branch=$(GIT_BRANCH)" \
+		--var "current_directory=$(CURRENT_DIRECTORY)" \
+		--var "deploy_target=$(DEPLOY_TARGET)" \
+		--var "cache_control=$(CACHE_CONTROL)" \
+		--var "modwsgi_user=$(MODWSGI_USER)" \
+		--var "wsgi_processes=$(WSGI_PROCESSES)" \
+		--var "wsgi_threads=$(WSGI_THREADS)" \
+		--var "wsgi_app=$(WSGI_APP)" \
+		--var "kml_temp_dir=$(KML_TEMP_DIR)" $< > $@
 apache/wsgi.conf.in:
 	@echo "${GREEN}Template file apache/wsgi.conf.in has changed${RESET}";
 apache/wsgi.conf: apache/wsgi.conf.in \
@@ -563,9 +618,8 @@ requirements.txt:
 
 ifeq ($(USE_PYTHON3), 1)
 .venv: requirements.txt
-		test -d "$(INSTALL_DIRECTORY)" || local/bin/python3.6 -m venv $(INSTALL_DIRECTORY); \
+		test -d "$(INSTALL_DIRECTORY)" || local/bin/python3.7 -m venv $(INSTALL_DIRECTORY); \
 		${PIP_CMD} install --upgrade pip==19.2.3 setuptools --index-url ${PYPI_URL} ; 
-		${PIP_CMD} install --index-url ${PYPI_URL}  -e .
 else
 .venv: requirements.txt
 	@echo "${GREEN}Setting up virtual environement...${RESET}";
@@ -574,8 +628,13 @@ else
 		virtualenv -p /usr/bin/python2  $(INSTALL_DIRECTORY); \
 		${PIP_CMD} install --upgrade pip==19.2.3 setuptools==44.0.0 enum34==1.1.6 --index-url ${PYPI_URL} ; \
 	fi
-	${PIP_CMD} install --index-url ${PYPI_URL} -e .
+	# ${PIP_CMD} install --index-url ${PYPI_URL} -e .
 endif
+
+.PHONY: code
+code:
+	${PIP_CMD} install --index-url ${PYPI_URL}  -e .
+
 
 .venv/bin/git-secrets: .venv
 	@echo "${GREEN}Installing git secrets${RESET}";
@@ -590,7 +649,8 @@ package.json:
 	@echo "${GREEN}File package.json has changed${RESET}";
 node_modules: package.json
 	@echo "${GREEN}Installing node packages...${RESET}";
-	npm install --production
+	npm install npm@latest -g
+	npm -V
 	cp -f node_modules/jquery/dist/jquery.min.js chsdi/static/js/jquery.min.js
 	cp -f node_modules/blueimp-gallery/js/blueimp-gallery.min.js chsdi/static/js/blueimp-gallery.min.js
 	cp -f node_modules/d3/d3.min.js chsdi/static/js/d3.min.js
@@ -750,6 +810,12 @@ chsdi/static/css/extended.min.css: chsdi/static/less/extended.less
 
 .venv/last-wsgi-app::
 	$(call cachelastvariable,$@,$(WSGI_APP),$(LAST_WSGI_APP),wsgi-app)
+
+.venv/last-apache-port::
+	$(call cachelastvariable,$@,$(APACHE_PORT),$(LAST_APACHE_PORT),apache-port)
+
+.venv/last-wsgi-port::
+	$(call cachelastvariable,$@,$(WSGI_PORT),$(LAST_WSGI_PORT),wsgi-port)
 
 fixrights:
 	@echo "${GREEN}Fixing rights...${RESET}";
