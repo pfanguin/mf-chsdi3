@@ -235,6 +235,9 @@ setup: .venv node_modules .venv/hooks
 templates: apache/wsgi.conf development.ini production.ini chsdi/static/info.json
 
 
+PHONY: image
+image:
+	docker build -t swisstopo/mf-chsdi3:python3.7  -f Dockerfile  .
 
 
 .PHONY: dev
