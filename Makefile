@@ -157,7 +157,7 @@ ifeq ($(USE_PYTHON3), 1)
 		PYTHON_VERSION := 3.7.3
 		PYTHON_CMD := /usr/bin/python3
     PIP_CMD := /usr/bin/pip3
-		MAKO_CM := /usr/bin/mako-render 
+		MAKO_CMD := mako-render 
 build/python: local/bin/python3
 		mkdir -p build && touch build/python;
 else
