@@ -1,7 +1,7 @@
 <%inherit file="base.mako"/>
 
 <%
-  lang = lang if lang in ('fr','it','en') else 'de'
+  lang = lang if lang in ('fr','it') else 'de'
   produkt_text = 'produkt_%s' % lang
   hinweis_text = 'hinweis_%s' % lang
 %>
@@ -41,11 +41,11 @@
   </tr>
   <tr>
     <td class="cell-left">${_('ch.vbs.bundestankstellen-bebeco.x_koord')}</td>
-    <td>${c['attributes']['x_koord'] or '-'}</td>
+    <td>${c['attributes']['x'] or '-'}</td>
   </tr>
   <tr>
     <td class="cell-left">${_('ch.vbs.bundestankstellen-bebeco.y_koord')}</td>
-    <td>${c['attributes']['y_koord'] or '-'}</td>
+    <td>${c['attributes']['y'] or '-'}</td>
   </tr>
 
 </%def>
