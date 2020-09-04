@@ -164,10 +164,16 @@ class BundestankstellenBebeco:
     __label__ = 'ort'
     __returnedGeometry__ = 'the_geom_point'
     id = Column('bgdi_id', Integer, primary_key=True)
-    strasse = Column('strasse', Unicode)
+    standort = Column('standort', Unicode)
+    adresse = Column('adresse', Unicode)
     plz = Column('plz', Integer)
     ort = Column('ort', Unicode)
-    bezugszeit = Column('bezugszeit', Unicode)
+    oeffnungszeiten = Column('oeffnungszeiten', Unicode)
+    produkt = Column('produkt_de', Unicode)
+    hinweise = Column('hinweis_de', Unicode)
+    kontakt = Column('kontakt', Unicode)
+    x_koord = Column('x_koord', Float)
+    y_koord = Column('y_koord', Float)
     the_geom_point = Column('the_geom', Geometry2D)
 
 
