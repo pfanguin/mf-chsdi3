@@ -184,14 +184,14 @@ class BundestankstellenBebeco:
 class BundestankstellenBebecoZoom1(Base, BundestankstellenBebeco, Vector):
     __minscale__ = 1
     __maxscale__ = 10000
-    the_geom = Column('the_geom_tooltip_2', Geometry2D)
+    the_geom = Column('the_geom', Geometry2D)
 
 register(BundestankstellenBebeco.__bodId__, BundestankstellenBebecoZoom1)
 
 
 class BundestankstellenBebecoZoom2(Base, BundestankstellenBebeco, Vector):
     __minscale__ = 10000
-    the_geom = Column('the_geom_tooltip', Geometry2D)
+    the_geom = Column('the_geom', Geometry2D)
 
 register(BundestankstellenBebeco.__bodId__, BundestankstellenBebecoZoom2)
 
