@@ -41,11 +41,11 @@
   </tr>
   <tr>
     <td class="cell-left">${_('ch.vbs.bundestankstellen-bebeco.x_koord')}</td>
-    <td>${c['attributes'][''] or '-'}</td>
+    <td>${c['attributes']['x_koord'] or '-'}</td>
   </tr>
   <tr>
     <td class="cell-left">${_('ch.vbs.bundestankstellen-bebeco.y_koord')}</td>
-    <td>${c['attributes'][''] or '-'}</td>
+    <td>${c['attributes']['y_koord'] or '-'}</td>
   </tr>
 
 </%def>
