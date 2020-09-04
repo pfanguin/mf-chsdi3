@@ -176,8 +176,8 @@ class BundestankstellenBebeco:
     hinweis_fr = Column('hinweis_fr', Unicode)
     hinweis_it = Column('hinweis_it', Unicode)
     kontakt = Column('kontakt', Unicode)
-    x_koord = Column('x', Float)
-    y_koord = Column('y', Float)
+    x = Column('x', Float)
+    y = Column('y', Float)
     the_geom_point = Column('the_geom', Geometry2D)
 
 
