@@ -170,7 +170,7 @@ class BundestankstellenBebeco:
     ort = Column('ort', Unicode)
     oeffnungszeiten = Column('oeffnungszeiten', Unicode)
     produkt_de = Column('produkt_de', Unicode)
-    hinweise_de = Column('hinweis_de', Unicode)
+    hinweis_de = Column('hinweis_de', Unicode)
     kontakt = Column('kontakt', Unicode)
     x_koord = Column('x_koord', Float)
     y_koord = Column('y_koord', Float)
