@@ -156,11 +156,11 @@ register('ch.vbs.armeelogistikcenter', Armeelogistikcenter)
 
 
 class BundestankstellenBebeco:
-    __tablename__ = 'v_bundestankstellen_bebeco'
+    __tablename__ = 'bundestankstellen_bebeco'
     __table_args__ = ({'schema': 'militaer', 'autoload': False, 'extend_existing': True})
     __template__ = 'templates/htmlpopup/bundestankstellen.mako'
     __bodId__ = 'ch.vbs.bundestankstellen-bebeco'
-    __queryable_attributes__ = ['standort', 'adresse', 'plz', 'ort', 'produkt_de', 'produkt_fr', 'produkt_it']
+    __queryable_attrutes__ = ['standort', 'adresse', 'plz', 'ort', 'produkt_de', 'produkt_fr', 'produkt_it']
     __label__ = 'ort'
     __returnedGeometry__ = 'the_geom_point'
     id = Column('bgdi_id', Integer, primary_key=True)
