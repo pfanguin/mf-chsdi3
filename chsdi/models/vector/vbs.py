@@ -160,8 +160,9 @@ class BundestankstellenBebeco:
     __table_args__ = ({'schema': 'militaer', 'autoload': False})
     __template__ = 'templates/htmlpopup/bundestankstellen.mako'
     __bodId__ = 'ch.vbs.bundestankstellen-bebeco'
-#    __queryable_attrutes__ = ['standort', 'adresse', 'plz', 'ort', 'produkt_de', 'produkt_fr', 'produkt_it']
+    __queryable_attrutes__ = ['ort']
     __label__ = 'ort'
+    __returnedGeometry__ = 'the_geom_point'
     id = Column('bgdi_id', Integer, primary_key=True)
     standort = Column('standort', Unicode)
     adresse = Column('adresse', Unicode)
@@ -177,9 +178,22 @@ class BundestankstellenBebeco:
     kontakt = Column('kontakt', Unicode)
     x_koord = Column('x', Float)
     y_koord = Column('y', Float)
+    the_geom_point = Column('the_geom', Geometry2D)
+
+
+class BundestankstellenBebecoZoom1(Base, BundestankstellenBebeco, Vector):
+    __minscale__ = 1
+    __maxscale__ = 10000
     the_geom = Column('the_geom', Geometry2D)
 
-register('ch.vbs.bundestankstellen-bebeco', BundestankstellenBebeco)
+register(BundestankstellenBebeco.__bodId__, BundestankstellenBebecoZoom1)
+
+
+class BundestankstellenBebecoZoom2(Base, BundestankstellenBebeco, Vector):
+    __minscale__ = 10000
+    the_geom = Column('the_geom', Geometry2D)
+
+register(BundestankstellenBebeco.__bodId__, BundestankstellenBebecoZoom2)
 
 
 class LogistikraeumeArmeelogistikcenter(Base, Vector):
