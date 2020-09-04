@@ -156,8 +156,8 @@ register('ch.vbs.armeelogistikcenter', Armeelogistikcenter)
 
 
 class BundestankstellenBebeco:
-    __tablename__ = 'bundestankstellen_bebeco'
-    __table_args__ = ({'schema': 'militaer', 'autoload': False})
+    __tablename__ = 'v_bundestankstellen_bebeco'
+    __table_args__ = ({'schema': 'militaer', 'autoload': False, 'extend_existing': True})
     __template__ = 'templates/htmlpopup/bundestankstellen.mako'
     __bodId__ = 'ch.vbs.bundestankstellen-bebeco'
     __queryable_attrutes__ = ['ort']
