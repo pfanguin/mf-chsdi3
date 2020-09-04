@@ -28,6 +28,10 @@
     <td>${c['attributes']['oeffnungszeiten'] or '-'}</td>
   </tr>
   <tr>
+    <td class="cell-left">${_('ch.vbs.bundestankstellen-bebeco.produkt')}</td>
+    <td>${c['attributes']['produkt_de'] or '-'}</td>
+  </tr>
+  <tr>
     <td class="cell-left">${_('ch.vbs.bundestankstellen-bebeco.hinweis')}</td>
     <td>${c['attributes']['hinweis_de'] or '-'}</td>
   </tr>
