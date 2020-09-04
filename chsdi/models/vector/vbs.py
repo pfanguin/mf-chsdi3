@@ -162,7 +162,6 @@ class BundestankstellenBebeco:
     __bodId__ = 'ch.vbs.bundestankstellen-bebeco'
     __queryable_attrutes__ = ['standort', 'adresse', 'plz', 'ort', 'produkt_de', 'produkt_fr', 'produkt_it']
     __label__ = 'ort'
-    __returnedGeometry__ = 'the_geom_point'
     id = Column('bgdi_id', Integer, primary_key=True)
     standort = Column('standort', Unicode)
     adresse = Column('adresse', Unicode)
