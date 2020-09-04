@@ -160,7 +160,7 @@ class BundestankstellenBebeco:
     __table_args__ = ({'schema': 'militaer', 'autoload': False})
     __template__ = 'templates/htmlpopup/bundestankstellen.mako'
     __bodId__ = 'ch.vbs.bundestankstellen-bebeco'
-    __queryable_attrutes__ = ['standort', 'adresse', 'plz', 'ort', 'produkt_de', 'produkt_fr', 'produkt_it']
+#    __queryable_attrutes__ = ['standort', 'adresse', 'plz', 'ort', 'produkt_de', 'produkt_fr', 'produkt_it']
     __label__ = 'ort'
     id = Column('bgdi_id', Integer, primary_key=True)
     standort = Column('standort', Unicode)
