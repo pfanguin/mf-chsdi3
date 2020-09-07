@@ -34,7 +34,7 @@
   </tr>
   <tr>
     <td class="cell-left">${_('ch.vbs.bundestankstellen-bebeco.hinweis')}</td>
-    <td class="cell-left">${c['attributes']['hinweis_de'] or '-'}</td>
+    <td class="cell-left">${c['attributes'][hinweis_text] or '-'}</td>
   </tr>
   <tr>
     <td class="cell-left">${_('ch.vbs.bundestankstellen-bebeco.kontakt')}</td>
