@@ -2555,6 +2555,8 @@ class GeologieGeotopeKantoneStand(Base, Vector):
     dataviewer = Column('dataviewer', Unicode)
     the_geom = Column(Geometry2D)
 
+register('ch.swisstopo.geologie-geotope_kantone_stand', GeologieGeotopeKantoneStand)
+
 
 class SteineHistBauwerke(Base, Vector):
     __tablename__ = 'geotechnik_steine_historische_bauwerke'
